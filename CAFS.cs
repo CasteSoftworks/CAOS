@@ -1,8 +1,6 @@
 ﻿using System;
-
 using System.IO;
-
-
+using System.Text;
 
 namespace CaOS
 
@@ -28,6 +26,11 @@ namespace CaOS
 
         {
             Directory.CreateDirectory(Adr);
+        }
+
+        public static void deleteDir(string Adr)
+        {
+            Directory.Delete(Adr);
         }
 
         public static string[] readFiles(string Adr) // Get Files From Address
@@ -73,6 +76,7 @@ namespace CaOS
             FileRead = File.ReadAllBytes(FileAdr);
             return FileRead;
         }
+        
 
     }
 

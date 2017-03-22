@@ -1,7 +1,15 @@
-﻿using System;
+﻿using CAOS;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Sys = Cosmos.System;
+
+
+
+
+
+
+
 
 namespace CaOS
 {
@@ -15,11 +23,13 @@ namespace CaOS
         bool useruno = true;
         public bool FSinit = false;
         string current_path = @"0:\";
+        public bool SudoY = false;
+        
 
         protected override void BeforeRun()
         {
             Console.Clear();
-
+            
 
             Console.ForegroundColor = ConsoleColor.White;
             Console.BackgroundColor = ConsoleColor.Black;
@@ -113,11 +123,12 @@ namespace CaOS
             Console.WriteLine("                                                                 ");
             Console.WriteLine("                       Successfully booted                       ");
             inizia:
-            Console.Write("Start?(Y/N)");
+            Console.Write(nomeutente+" do you want to start?(Y/N)");
             var sino = Console.ReadLine();
             if (sino == "Y" || sino == "y")
             {
                 Console.Clear();
+
             }
             else if (sino == "N" || sino == "n")
             {
@@ -146,11 +157,11 @@ namespace CaOS
             switch (co)
             {
 
-                case "reboot":
+                case "reboot":    //Reboots the machine
                     Cosmos.System.Power.Reboot();
                     break;
 
-                case "shutdown":
+                case "shutdown":   //Shuts down the machine
                     if (useruno)
                     {
                         Console.WriteLine("now you can power off your system, " + user1 + ".");
@@ -163,11 +174,11 @@ namespace CaOS
                     }
                     break;
 
-                case "clear":
+                case "clear":   //Clears the screen
                     Console.Clear();
                     break;
 
-                case "help":
+                case "help":  //All the commands
                     Console.WriteLine("With or without the File system:");
                     Console.WriteLine("                                ");
                     Console.WriteLine("Reboot = reboot");
@@ -176,16 +187,16 @@ namespace CaOS
                     Console.WriteLine("About CAOS = about");
                     Console.WriteLine("Lock = lock");
                     Console.WriteLine("Print something on screen = print/things to print");
-                    Console.WriteLine("                                ");
-                    Console.WriteLine("                                ");
+                    Console.WriteLine("Become user with sudo privilges = sudo");
+                    Console.WriteLine("--------------------------------------------------------");
                     Console.WriteLine("Only with File System:");
                     Console.WriteLine("                                ");
                     Console.WriteLine("Go to specified directory = cd/directory");
                     Console.WriteLine("Create directory = md/new directory's name");
                     Console.WriteLine("Show current directories = dir");
                     Console.WriteLine("Use basic text editor = microtxt");
-                    Console.WriteLine("                                ");
-                    Console.WriteLine("                                ");
+                    Console.WriteLine("Deletes the specified directory[sudo] = dd/directory");
+                    Console.WriteLine("--------------------------------------------------------");
                     Console.WriteLine("Calculator Commands:");
                     Console.WriteLine("                                ");
                     Console.WriteLine("Add two numbers together = add/num1#num2");
@@ -203,16 +214,16 @@ namespace CaOS
                     lockkernel.lockpass(pass);
                     break;
 
-                case "print":
+                case "print":   //Prints something
                     Console.WriteLine(vars);
                     break;
 
-                case "about":
+                case "about":  //Some information
                     Console.WriteLine("CAOS , CasteSoftworks " + version + " for help castesoftworks@fastservice.com");
                     Console.WriteLine("or go to our site castesoftworks.000webhostapp.com");
                     break;
 
-                case "cd":
+                case "cd":  //Changes current directory 
                     if (FSinit)
                     {
                         current_path = vars;
@@ -254,18 +265,6 @@ namespace CaOS
                     }
                     break;
 
-                case "microtxt": // Launches text editor
-                    if (FSinit)
-                    {
-                        Console.Clear();
-                        microtxt.init();
-                        break;
-                    }
-                    else
-                    {
-                        Console.WriteLine("File System Not Enabled!");
-                    }
-                    break;
 
                 case "add": // Adds given numbers
                     string[] inputvarsa = vars.Split('#');
@@ -300,6 +299,42 @@ namespace CaOS
                 case "lcm": // Gives lcm conversion of given numbers
                     string[] inputvarsg = vars.Split('#');
                     Console.WriteLine(CAOS.Mate.LcmCon(inputvarsg[0], inputvarsg[1]));
+                    break;
+
+                
+
+                case "microtxt":
+                    Console.Clear();
+                    microtxt.init();
+                    break;
+
+                //case "BASIC": working on basic-style programming
+                //Console.Clear();
+                //Basic.init();
+                //break;
+                
+                case "sudo": //Become sudo user
+                    Console.Write("Are you sure to become a sudo user?(Y/N)");
+                    var sicuro = Console.ReadLine();
+                    if (sicuro == "Y"||sicuro == "y")
+                    {
+                        SudoY = true;
+                    }
+                    else 
+                    {
+                        SudoY = false;
+                    }
+                    break;
+
+                case "dd":
+                    if (SudoY)
+                    {
+                        CAFS.deleteDir(current_path+vars);
+                    }
+                    else
+                    {
+                        Console.WriteLine("I'm sorry, you aren't a sudo user");
+                    }
                     break;
 
                 default:
