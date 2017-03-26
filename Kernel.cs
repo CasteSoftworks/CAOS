@@ -344,10 +344,11 @@ namespace CaOS
                 Console.WriteLine("       @               @          @    @          @               @          ");
                 Console.WriteLine("      @@@@@@@@@@@@    @          @    @@@@@@@@@@@@    @@@@@@@@@@@@           ");
                 Console.WriteLine("                                                                             ");
-                Console.WriteLine("   I'm sorry but an fatal error occurred, I will power off your ");
-                Console.WriteLine("   system and hope that nothing has been damaged                             ");
+                Console.WriteLine("   I'm sorry but a fatal error occurred, I will power off your system and    ");
+                Console.WriteLine("   hope that nothing has been damaged                                        ");
                 Console.WriteLine("                                                                             ");
                 Console.WriteLine("   CasteSoftworks hasn't got any responsability on any type of damage        ");
+                Console.WriteLine("                                                                             ");
                 Console.WriteLine("    "+e);
             }
         }
