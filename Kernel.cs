@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using Sys = Cosmos.System;
 
 
@@ -15,7 +16,7 @@ namespace CaOS
 {
     public class Kernel : Sys.Kernel
     {
-        string version = "20170305";
+        string version = "20170324";
         string pass = "";
         string user1 = "User1";
         string user2 = "User2";
@@ -24,7 +25,7 @@ namespace CaOS
         public bool FSinit = false;
         string current_path = @"0:\";
         public bool SudoY = false;
-        
+        public bool noerror = true; //For a while(_) like use
 
         protected override void BeforeRun()
         {
@@ -41,7 +42,7 @@ namespace CaOS
             Console.WriteLine("     |||               |||    |||         |||        |||                  |||   ");
             Console.WriteLine("     [][][][][         [][    ][]         [][][][][][][]          [][][][][][   ");
             Console.WriteLine("                                                                                ");
-            Console.WriteLine("**********************    CasteSoftworks " + version + "    ******************");
+            Console.WriteLine("**********************    CasteSoftworks " + version + "      ******************");
             Console.WriteLine("                                                                                ");
             Console.WriteLine("**********************                Setup               **********************");
             filesystem:
@@ -55,33 +56,18 @@ namespace CaOS
                 var fs = new Sys.FileSystem.CosmosVFS();
 
                 Sys.FileSystem.VFS.VFSManager.RegisterVFS(fs);
-                goto setupcolore;
+                goto user1;
             }
             else if (filesys == "N" || filesys == "n")
             {
                 Console.WriteLine("File System Will NOT Be Initialized!");
-                goto setupcolore;
+                goto user1;
             }
             else
             {
                 goto filesystem;
             }
-            setupcolore:
-            Console.Write("Font color W(white) or G(green)?(W/G)");
-            var colore = Console.ReadLine();
-            if (colore == "W" || colore == "w")
-            {
-                goto user1;
-            }
-            else if (colore == "G" || colore == "g")
-            {
-                Console.ForegroundColor = ConsoleColor.DarkGreen;
-                goto user1;
-            }
-            else
-            {
-                goto setupcolore;
-            }
+            
             user1:
             Console.Write("What user do you want to use?(1/2)");
             var utente = Console.ReadLine();
@@ -114,14 +100,14 @@ namespace CaOS
 
             booted:
             Console.Clear();
-            Console.WriteLine("     ************    ************    ************    ************");
-            Console.WriteLine("    *               *          *    *          *    *            ");
-            Console.WriteLine("   #               ############    #          #    ############  ");
-            Console.WriteLine("  #               #          #    #          #               #   ");
-            Console.WriteLine(" @               @          @    @          @               @    ");
-            Console.WriteLine("@@@@@@@@@@@@    @          @    @@@@@@@@@@@@    @@@@@@@@@@@@     ");
-            Console.WriteLine("                                                                 ");
-            Console.WriteLine("                       Successfully booted                       ");
+            Console.WriteLine("       ************    ************    ************    ************  ");
+            Console.WriteLine("      *               *          *    *          *    *              ");
+            Console.WriteLine("     #               ############    #          #    ############    ");
+            Console.WriteLine("    #               #          #    #          #               #     ");
+            Console.WriteLine("   @               @          @    @          @               @      ");
+            Console.WriteLine("  @@@@@@@@@@@@    @          @    @@@@@@@@@@@@    @@@@@@@@@@@@       ");
+            Console.WriteLine("                                                                     ");
+            Console.WriteLine("                         Successfully booted                         ");
             inizia:
             Console.Write(nomeutente+" do you want to start?(Y/N)");
             var sino = Console.ReadLine();
@@ -154,192 +140,215 @@ namespace CaOS
                 co = parts[0];
                 vars = parts[1];
             }
-            switch (co)
+            try 
             {
+                switch (co)
+                {
 
-                case "reboot":    //Reboots the machine
-                    Cosmos.System.Power.Reboot();
-                    break;
+                    case "reboot":    //Reboots the machine
+                        Cosmos.System.Power.Reboot();
+                        break;
 
-                case "shutdown":   //Shuts down the machine
-                    if (useruno)
-                    {
-                        Console.WriteLine("now you can power off your system, " + user1 + ".");
-                        Stop();
-                    }
-                    else
-                    {
-                        Console.WriteLine("now you can power off your system, " + user2 + ".");
-                        Stop();
-                    }
-                    break;
-
-                case "clear":   //Clears the screen
-                    Console.Clear();
-                    break;
-
-                case "help":  //All the commands
-                    Console.WriteLine("With or without the File system:");
-                    Console.WriteLine("                                ");
-                    Console.WriteLine("Reboot = reboot");
-                    Console.WriteLine("Shutdown = shutdown");
-                    Console.WriteLine("Clear = clear");
-                    Console.WriteLine("About CAOS = about");
-                    Console.WriteLine("Lock = lock");
-                    Console.WriteLine("Print something on screen = print/things to print");
-                    Console.WriteLine("Become user with sudo privilges = sudo");
-                    Console.WriteLine("--------------------------------------------------------");
-                    Console.WriteLine("Only with File System:");
-                    Console.WriteLine("                                ");
-                    Console.WriteLine("Go to specified directory = cd/directory");
-                    Console.WriteLine("Create directory = md/new directory's name");
-                    Console.WriteLine("Show current directories = dir");
-                    Console.WriteLine("Use basic text editor = microtxt");
-                    Console.WriteLine("Deletes the specified directory[sudo] = dd/directory");
-                    Console.WriteLine("--------------------------------------------------------");
-                    Console.WriteLine("Calculator Commands:");
-                    Console.WriteLine("                                ");
-                    Console.WriteLine("Add two numbers together = add/num1#num2");
-                    Console.WriteLine("Subtract a number to an other = subtract/num1#num2");
-                    Console.WriteLine("Muliply two numbers together = multiply/num1#num2");
-                    Console.WriteLine("Divide one number with another number = divide/num1#num2");
-                    Console.WriteLine("One nuber to the power of another = power/num1#num2");
-                    Console.WriteLine("Least Common Number of two numbers = lcm/num1#num2");
-                    Console.WriteLine("Greatest Common Factor of two numbers = gcf/num1#num2");
-                    break;
-
-                case "lock":
-                    Console.Write("Set Passcode: ");
-                    pass = Console.ReadLine();
-                    lockkernel.lockpass(pass);
-                    break;
-
-                case "print":   //Prints something
-                    Console.WriteLine(vars);
-                    break;
-
-                case "about":  //Some information
-                    Console.WriteLine("CAOS , CasteSoftworks " + version + " for help castesoftworks@fastservice.com");
-                    Console.WriteLine("or go to our site castesoftworks.000webhostapp.com");
-                    break;
-
-                case "cd":  //Changes current directory 
-                    if (FSinit)
-                    {
-                        current_path = vars;
-                    }
-                    else
-                    {
-                        Console.WriteLine("File System Not Enabled!");
-                    }
-                    break;
-
-                case "md":  // Makes new directory
-                    if (FSinit)
-
-                    {
-                        CAFS.createDir(current_path + vars);
-                    }
-                    else
-                    {
-                        Console.WriteLine("File System Not Enabled!");
-                    }
-                    break;
-
-                case "dir": // Displays current location
-                    if (FSinit)
-                    {
-                        string[] back = CAFS.readFiles(current_path);
-                        string[] front = CAFS.readDirectories(current_path);
-                        string[] combined = new string[front.Length + back.Length];
-                        Array.Copy(front, combined, front.Length);
-                        Array.Copy(back, 0, combined, front.Length, back.Length);
-                        foreach (var item in combined)
+                    case "shutdown":   //Shuts down the machine
+                        if (useruno)
                         {
-                            Console.WriteLine(item.ToString());
+                            Console.WriteLine("now you can power off your system, " + user1 + ".");
+                            Stop();
                         }
-                    }
-                    else
-                    {
-                        Console.WriteLine("File System Not Enabled!");
-                    }
-                    break;
+                        else
+                        {
+                            Console.WriteLine("now you can power off your system, " + user2 + ".");
+                            Stop();
+                        }
+                        break;
+
+                    case "clear":   //Clears the screen
+                        Console.Clear();
+                        break;
+
+                    case "help":  //All the commands
+                        Console.WriteLine("                                ");
+                        Console.WriteLine("Reboot = reboot");
+                        Console.WriteLine("Shutdown = shutdown");
+                        Console.WriteLine("Clear = clear");
+                        Console.WriteLine("About CAOS = about");
+                        Console.WriteLine("Lock = lock");
+                        Console.WriteLine("Print something on screen = print/things to print");
+                        Console.WriteLine("Become user with sudo privilges = sudo");
+                        Console.WriteLine("--------------------------------------------------------");
+                        Console.WriteLine("                                ");
+                        Console.WriteLine("Go to specified directory = cd/directory");
+                        Console.WriteLine("Create directory = md/new directory's name");
+                        Console.WriteLine("Show current directories = dir");
+                        Console.WriteLine("Use basic text editor = microtxt");
+                        Console.WriteLine("Deletes the specified directory[sudo] = dd/directory");
+                        Console.WriteLine("--------------------------------------------------------");
+                        Console.WriteLine("                                ");
+                        Console.WriteLine("Add two numbers together = add/num1#num2");
+                        Console.WriteLine("Subtract a number to an other = subtract/num1#num2");
+                        Console.WriteLine("Muliply two numbers together = multiply/num1#num2");
+                        Console.WriteLine("Divide one number with another number = divide/num1#num2");
+                        Console.WriteLine("One nuber to the power of another = power/num1#num2");
+                        Console.WriteLine("Least Common Number of two numbers = lcm/num1#num2");
+                        Console.WriteLine("Greatest Common Factor of two numbers = gcf/num1#num2");
+                        break;
+
+                    case "lock":
+                        Console.Write("Set Passcode: ");
+                        pass = Console.ReadLine();
+                        lockkernel.lockpass(pass);
+                        break;
+
+                    case "print":   //Prints something
+                        Console.WriteLine(vars);
+                        break;
+
+                    case "about":  //Some information
+                        Console.WriteLine("CAOS , CasteSoftworks " + version + " for help castesoftworks@fastservice.com");
+                        Console.WriteLine("or go to our site castesoftworks.000webhostapp.com");
+                        break;
+
+                    case "cd":  //Changes current directory 
+                        if (FSinit)
+                        {
+                            current_path = vars;
+                        }
+                        else
+                        {
+                            Console.WriteLine("File System Not Enabled!");
+                        }
+                        break;
+
+                    case "md":  // Makes new directory
+                        if (FSinit)
+
+                        {
+                            CAFS.createDir(current_path + vars);
+                        }
+                        else
+                        {
+                            Console.WriteLine("File System Not Enabled!");
+                        }
+                        break;
+
+                    case "dir": // Displays current location
+                        if (FSinit)
+                        {
+                            string[] back = CAFS.readFiles(current_path);
+                            string[] front = CAFS.readDirectories(current_path);
+                            string[] combined = new string[front.Length + back.Length];
+                            Array.Copy(front, combined, front.Length);
+                            Array.Copy(back, 0, combined, front.Length, back.Length);
+                            foreach (var item in combined)
+                            {
+                                Console.WriteLine(item.ToString());
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("File System Not Enabled!");
+                        }
+                        break;
 
 
-                case "add": // Adds given numbers
-                    string[] inputvarsa = vars.Split('#');
-                    Console.WriteLine(CAOS.Mate.Add(inputvarsa[0], inputvarsa[1]));
-                    break;
+                    case "add": // Adds given numbers
+                        string[] inputvarsa = vars.Split('#');
+                        Console.WriteLine(CAOS.Mate.Add(inputvarsa[0], inputvarsa[1]));
+                        break;
 
-                case "subtract": // Subtracts given numbers
-                    string[] inputvarsb = vars.Split('#');
-                    Console.WriteLine(CAOS.Mate.Subtract(inputvarsb[0], inputvarsb[1]));
-                    break;
+                    case "subtract": // Subtracts given numbers
+                        string[] inputvarsb = vars.Split('#');
+                        Console.WriteLine(CAOS.Mate.Subtract(inputvarsb[0], inputvarsb[1]));
+                        break;
 
-                case "multiply": // Multiplys given numbers
-                    string[] inputvarsc = vars.Split('#');
-                    Console.WriteLine(CAOS.Mate.Multiply(inputvarsc[0], inputvarsc[1]));
-                    break;
+                    case "multiply": // Multiplys given numbers
+                        string[] inputvarsc = vars.Split('#');
+                        Console.WriteLine(CAOS.Mate.Multiply(inputvarsc[0], inputvarsc[1]));
+                        break;
 
-                case "divide": // Divides given numbers
-                    string[] inputvarsd = vars.Split('#');
-                    Console.WriteLine(CAOS.Mate.Divide(inputvarsd[0], inputvarsd[1]));
-                    break;
+                    case "divide": // Divides given numbers
+                        string[] inputvarsd = vars.Split('#');
+                        Console.WriteLine(CAOS.Mate.Divide(inputvarsd[0], inputvarsd[1]));
+                        break;
 
-                case "power": // Raises given number to other given number
-                    string[] inputvarse = vars.Split('#');
-                    Console.WriteLine(CAOS.Mate.ToPower(inputvarse[0], inputvarse[1]));
-                    break;
+                    case "power": // Raises given number to other given number
+                        string[] inputvarse = vars.Split('#');
+                        Console.WriteLine(CAOS.Mate.ToPower(inputvarse[0], inputvarse[1]));
+                        break;
 
-                case "gcd": // Gives gcd conversion of given numbers
-                    string[] inputvarsf = vars.Split('#');
-                    Console.WriteLine(CAOS.Mate.GcdCon(inputvarsf[0], inputvarsf[1]));
-                    break;
+                    case "gcd": // Gives gcd conversion of given numbers
+                        string[] inputvarsf = vars.Split('#');
+                        Console.WriteLine(CAOS.Mate.GcdCon(inputvarsf[0], inputvarsf[1]));
+                        break;
 
-                case "lcm": // Gives lcm conversion of given numbers
-                    string[] inputvarsg = vars.Split('#');
-                    Console.WriteLine(CAOS.Mate.LcmCon(inputvarsg[0], inputvarsg[1]));
-                    break;
+                    case "lcm": // Gives lcm conversion of given numbers
+                        string[] inputvarsg = vars.Split('#');
+                        Console.WriteLine(CAOS.Mate.LcmCon(inputvarsg[0], inputvarsg[1]));
+                        break;
 
+
+
+                    case "microtxt":
+                        Console.Clear();
+                        microtxt.init();
+                        break;
+
+                    //case "BASIC": working on basic-style programming
+                    //Console.Clear();
+                    //Basic.init();
+                    //break;
+
+                    case "sudo": //Become sudo user
+                        Console.Write("Are you sure to become a sudo user?(Y/N)");
+                        var sicuro = Console.ReadLine();
+                        if (sicuro == "Y" || sicuro == "y")
+                        {
+                            SudoY = true;
+                        }
+                        else
+                        {
+                            SudoY = false;
+                        }
+                        break;
+
+                    case "dd":
+                        if (SudoY)
+                        {
+                            CAFS.deleteDir(current_path + vars);
+                        }
+                        else
+                        {
+                            Console.WriteLine("I'm sorry, you aren't a sudo user");
+                        }
+                        break;
+
+                    case "read":
+                        string text = System.IO.File.ReadAllText(@"0:\File.txt");
+                        Console.WriteLine(text);
+                        break;
+
+                    default:
+                        Console.WriteLine(error);
+                        break;
+                }
+            }
+            catch(Exception e) //BlueScreenOfDeath-like thing I wanted to make noerror false but it bugs
+            {
                 
-
-                case "microtxt":
-                    Console.Clear();
-                    microtxt.init();
-                    break;
-
-                //case "BASIC": working on basic-style programming
-                //Console.Clear();
-                //Basic.init();
-                //break;
-                
-                case "sudo": //Become sudo user
-                    Console.Write("Are you sure to become a sudo user?(Y/N)");
-                    var sicuro = Console.ReadLine();
-                    if (sicuro == "Y"||sicuro == "y")
-                    {
-                        SudoY = true;
-                    }
-                    else 
-                    {
-                        SudoY = false;
-                    }
-                    break;
-
-                case "dd":
-                    if (SudoY)
-                    {
-                        CAFS.deleteDir(current_path+vars);
-                    }
-                    else
-                    {
-                        Console.WriteLine("I'm sorry, you aren't a sudo user");
-                    }
-                    break;
-
-                default:
-                    Console.WriteLine(error);
-                    break;
+                Console.BackgroundColor = ConsoleColor.Blue;
+                Console.Clear();
+                Console.WriteLine("           ************    ************    ************    ************      ");
+                Console.WriteLine("          *               *          *    *          *    *                  ");
+                Console.WriteLine("         #               ############    #          #    ############        ");
+                Console.WriteLine("        #               #          #    #          #               #         ");
+                Console.WriteLine("       @               @          @    @          @               @          ");
+                Console.WriteLine("      @@@@@@@@@@@@    @          @    @@@@@@@@@@@@    @@@@@@@@@@@@           ");
+                Console.WriteLine("                                                                             ");
+                Console.WriteLine("   I'm sorry but an fatal error occurred, I will power off your ");
+                Console.WriteLine("   system and hope that nothing has been damaged                             ");
+                Console.WriteLine("                                                                             ");
+                Console.WriteLine("   CasteSoftworks hasn't got any responsability on any type of damage        ");
+                Console.WriteLine("    "+e);
             }
         }
     }

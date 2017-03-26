@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
 using System.Threading.Tasks;
 
 
@@ -16,7 +17,7 @@ namespace CaOS
 
     class microtxt
     {
-
+        public static string adr = @"0:\File.txt";
         public static void init()
 
         {
@@ -53,6 +54,7 @@ namespace CaOS
         public static void main()
         {
             ConsoleKeyInfo pressed_key = Console.ReadKey(); // read keystroke
+            
 
             switch (pressed_key.Key)
 
@@ -109,6 +111,13 @@ namespace CaOS
                 case ConsoleKey.F12: //Closes out of tdit
                     Console.Clear();
                     Console.WriteLine("Press F12 again if you see this."); // Kinda fixes it, bot not all the way.
+                    return;
+
+                case ConsoleKey.F1:
+                    string testo = pressed_key.KeyChar.ToString();
+                    File.Create(adr);
+                    CAFS.writeText(adr, testo);
+                    Console.Clear();
                     return;
             }
             main();
