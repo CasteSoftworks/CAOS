@@ -350,6 +350,7 @@ namespace CaOS
                 Console.WriteLine("   CasteSoftworks hasn't got any responsability on any type of damage        ");
                 Console.WriteLine("                                                                             ");
                 Console.WriteLine("    "+e);
+                Stop();
             }
         }
     }
