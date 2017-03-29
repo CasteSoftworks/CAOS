@@ -23,7 +23,7 @@ namespace CaOS
         {
             Console.Clear();
             Console.WriteLine("###############################################################################");
-            Console.WriteLine("# Exit: F12                                            Microtxt Version 1.0.0 #");
+            Console.WriteLine("# Exit: F12                                            Microtxt Version 1.1.0 #");
             Console.WriteLine("# New: F11                                                                    #");
             Console.WriteLine("###############################################################################");
             Console.WriteLine("*                                                                             *");
@@ -115,7 +115,6 @@ namespace CaOS
 
                 case ConsoleKey.F1:
                     string testo = pressed_key.KeyChar.ToString();
-                    File.Create(adr);
                     CAFS.writeText(adr, testo);
                     Console.Clear();
                     return;
