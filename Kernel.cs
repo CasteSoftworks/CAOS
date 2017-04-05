@@ -18,7 +18,7 @@ namespace CaOS
 {
     public class Kernel : Sys.Kernel
     {
-        string version = "20170324";
+        string version = "20170301";
         string pass = "";
         string user1 = "User1";
         string user2 = "User2";
@@ -26,13 +26,15 @@ namespace CaOS
         bool useruno = true;
         public bool FSinit = false;
         string current_path = @"0:\";
+        public bool firstlog = true;
         public bool SudoY = false;
+        public string username = "";
         public bool noerror = true; //For a while(_) like use
 
         protected override void BeforeRun()
         {
             Console.Clear();
-            
+
 
             Console.ForegroundColor = ConsoleColor.White;
             Console.BackgroundColor = ConsoleColor.Black;
@@ -69,49 +71,93 @@ namespace CaOS
             {
                 goto filesystem;
             }
-            
+
             user1:
-            Console.Write("What user do you want to use?(1/2)");
-            var utente = Console.ReadLine();
-            if (utente == "1")
+            try
             {
-                goto nomeutente;
+                if (File.Exists("0:\\login\\user_nme.txt") && File.Exists("0:\\login\\pass_wrd.txt"))
+                {
+                    firstlog = false;
+                    goto login;
+                }
+                else if ((Directory.Exists("0:\\login\\")))
+                {
+                    CAFS.createFile("0:\\login\\user_name.txt");
+                    CAFS.createFile("0:\\login\\pass_wrd.txt");
+                    goto login;
+                }
+                else
+                {
+                    CAFS.createDir("0:\\login");
+                    CAFS.createFile("0:\\login\\user_name.txt");
+                    CAFS.createFile("0:\\login\\pass_wrd.txt");
+                    goto login;
+                }
+
+                login:
+                if (firstlog)
+                {
+                    Console.Write("Set the user's name: ");
+                    var nomeutente = Console.ReadLine();
+                    CAFS.writeText("0:\\login\\user_name.txt", nomeutente);
+                    Console.Write("Set password: ");
+                    var passwrd = Console.ReadLine();
+                    CAFS.writeText("0:\\login\\pass_wrd.txt", passwrd);
+                }
+                else
+                {
+                    Console.WriteLine("You must log in!");
+                    setuser:
+                    Console.Write("User: ");
+                    var user = Console.ReadLine();
+                    var usernm = File.ReadAllText("0:\\login\\user_name.txt");
+                    if (user == usernm)
+                    {
+                        Console.WriteLine(user + "recognized");
+                        user = username;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Not correct username");
+                        goto setuser;
+                    }
+                    setpsswrd:
+                    Console.Write("Password: ");
+                    var passwd = Console.ReadLine();
+                    var passwdrd = File.ReadAllText("0:\\login\\pass_wrd.txt");
+                    if (passwd == passwdrd)
+                    {
+                        goto booted;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Not correct password" + user);
+                        goto setpsswrd;
+                    }
+                }
             }
-            else if (utente == "2")
+
+            catch
             {
-                useruno = false;
-                goto nomeutente;
-            }
-            else
-            {
-                goto user1;
-            }
-            nomeutente:
-            Console.Write("Set the user's name: ");
-            var nomeutente = Console.ReadLine();
-            if (useruno)
-            {
-                user1 = nomeutente;
                 goto booted;
             }
-            else
-            {
-                user2 = nomeutente;
-                goto booted;
-            }
+                
+            
+            
 
             booted:
             Console.Clear();
-            Console.WriteLine("       ************    ************    ************    ************  ");
-            Console.WriteLine("      *               *          *    *          *    *              ");
-            Console.WriteLine("     #               ############    #          #    ############    ");
-            Console.WriteLine("    #               #          #    #          #               #     ");
-            Console.WriteLine("   @               @          @    @          @               @      ");
-            Console.WriteLine("  @@@@@@@@@@@@    @          @    @@@@@@@@@@@@    @@@@@@@@@@@@       ");
-            Console.WriteLine("                                                                     ");
-            Console.WriteLine("                         Successfully booted                         ");
+            Console.WriteLine("           ************    ************    ************    ************     ");
+            Console.WriteLine("          *               *          *    *          *    *                 ");
+            Console.WriteLine("         #               ############    #          #    ############       ");
+            Console.WriteLine("        #               #          #    #          #               #        ");
+            Console.WriteLine("       @               @          @    @          @               @         ");
+            Console.WriteLine("      @@@@@@@@@@@@    @          @    @@@@@@@@@@@@    @@@@@@@@@@@@          ");
+            Console.WriteLine("                                                                            ");
+            Console.WriteLine("                             Successfully booted                            ");
+            Console.WriteLine("                                                                            ");
             inizia:
-            Console.Write(nomeutente+" do you want to start?(Y/N)");
+            Console.Write(username + " do you want to start?(Y/N)");
             var sino = Console.ReadLine();
             if (sino == "Y" || sino == "y")
             {
@@ -142,7 +188,7 @@ namespace CaOS
                 co = parts[0];
                 vars = parts[1];
             }
-            try 
+            try
             {
                 switch (co)
                 {
@@ -206,7 +252,7 @@ namespace CaOS
                         Console.WriteLine("Least Common Number of two numbers = lcm/num1#num2");
                         Console.WriteLine("Greatest Common Factor of two numbers = gcf/num1#num2");
                         Console.WriteLine("                                ");
-                        Console.WriteLine("*it not works with decimals(0.1 for example)");  
+                        Console.WriteLine("*it not works with decimals(0.1 for example)");
                         break;
                     case "helpdir":
                         Console.WriteLine("Do not delete the directories TEST, Testing, 0 because");
@@ -314,7 +360,7 @@ namespace CaOS
                         microtxt.init();
                         break;
 
-                    
+
                     //case "BASIC": working on basic-style programming
                     //Console.Clear();
                     //Basic.init();
@@ -344,14 +390,19 @@ namespace CaOS
                         }
                         break;
 
+                    case "program": // Launches optional packages
+                        string packageid = vars;
+                        CaOS.Runner.packages(packageid);
+                        break;
+
                     default:
                         Console.WriteLine(error);
                         break;
                 }
             }
-            catch(Exception e) //BlueScreenOfDeath-like thing I wanted to make noerror false but it bugs
+            catch (Exception e) //BlueScreenOfDeath-like thing I wanted to make noerror false but it bugs
             {
-                
+
                 Console.BackgroundColor = ConsoleColor.Blue;
                 Console.Clear();
                 Console.WriteLine("           ************    ************    ************    ************      ");
@@ -366,12 +417,12 @@ namespace CaOS
                 Console.WriteLine("                                                                             ");
                 Console.WriteLine("   CasteSoftworks hasn't got any responsability on any type of damage        ");
                 Console.WriteLine("                                                                             ");
-                Console.WriteLine("    "+e);
+                Console.WriteLine("    " + e);
                 Console.WriteLine("                                                                             ");
                 spegni:
                 Console.Write("   Do you want to reboot or shutdown?(R/S)");
                 var risp = Console.ReadLine();
-                if (risp == "R"||risp=="r")
+                if (risp == "R" || risp == "r")
                 {
                     Sys.Power.Reboot();
                 }
