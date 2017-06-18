@@ -1,0 +1,7 @@
+c:\users\chief\documents\visual studio 2017\Projects\CaOS_\CaOS_\bin\Debug\netstandard1.5\CaOS_.deps.json
+c:\users\chief\documents\visual studio 2017\Projects\CaOS_\CaOS_\bin\Debug\netstandard1.5\CaOS_.dll
+c:\users\chief\documents\visual studio 2017\Projects\CaOS_\CaOS_\bin\Debug\netstandard1.5\CaOS_.pdb
+c:\users\chief\documents\visual studio 2017\Projects\CaOS_\CaOS_\obj\Debug\netstandard1.5\CaOS_.csprojResolveAssemblyReference.cache
+c:\users\chief\documents\visual studio 2017\Projects\CaOS_\CaOS_\obj\Debug\netstandard1.5\CaOS_.AssemblyInfo.cs
+c:\users\chief\documents\visual studio 2017\Projects\CaOS_\CaOS_\obj\Debug\netstandard1.5\CaOS_.dll
+c:\users\chief\documents\visual studio 2017\Projects\CaOS_\CaOS_\obj\Debug\netstandard1.5\CaOS_.pdb
