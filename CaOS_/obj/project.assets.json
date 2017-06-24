@@ -3876,10 +3876,10 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Chief\\documents\\visual studio 2017\\Projects\\CaOS_\\CaOS_\\CaOS_.csproj",
+      "projectUniqueName": "c:\\users\\chief\\documents\\visual studio 2017\\Projects\\CaOS_\\CaOS_\\CaOS_.csproj",
       "projectName": "CaOS_",
-      "projectPath": "C:\\Users\\Chief\\documents\\visual studio 2017\\Projects\\CaOS_\\CaOS_\\CaOS_.csproj",
-      "outputPath": "C:\\Users\\Chief\\documents\\visual studio 2017\\Projects\\CaOS_\\CaOS_\\obj\\",
+      "projectPath": "c:\\users\\chief\\documents\\visual studio 2017\\Projects\\CaOS_\\CaOS_\\CaOS_.csproj",
+      "outputPath": "c:\\users\\chief\\documents\\visual studio 2017\\Projects\\CaOS_\\CaOS_\\obj\\",
       "projectStyle": "PackageReference",
       "originalTargetFrameworks": [
         "netstandard1.5"

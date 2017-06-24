@@ -30,7 +30,6 @@ namespace CaOS_
         protected override void BeforeRun()
         {
             Console.Clear();
-            Sys.KeyboardManager.SetKeyLayout(new Sys.ScanMaps.US_Standard());
             Console.ForegroundColor = ConsoleColor.White;
             Console.BackgroundColor = ConsoleColor.Black;
             Console.WriteLine("     +++++++++         ++++++++++         ++++++++++++++          +++++++++++   ");
@@ -51,25 +50,29 @@ namespace CaOS_
             {
                 FSinit = true;
                 Console.WriteLine("File System Will Be Initialized!");
-
                 var fs = new Sys.FileSystem.CosmosVFS();
-
                 Sys.FileSystem.VFS.VFSManager.RegisterVFS(fs);
-                
             }
             else if (filesys == "N" || filesys == "n")
             {
                 Console.WriteLine("File System Will NOT Be Initialized!");
-                
             }
             else
             {
                 goto filesystem;
             }
-
-            
-            
-            
+            try
+            {
+                CAFS.createDir("0:\\System86");
+                CAFS.createDir("0:\\User");
+                CAFS.createDir("0:\\User\\Documents");
+                Sys.KeyboardManager.SetKeyLayout(new Sys.ScanMaps.US_Standard());
+            }
+            catch (Exception exc)
+            {
+                goto fatto;
+            }
+            fatto:
             Console.Clear();
             logo.Logo(version);
             Console.ForegroundColor = ConsoleColor.White;
@@ -82,7 +85,6 @@ namespace CaOS_
             if (sino == "Y" || sino == "y")
             {
                 Console.Clear();
-
             }
             else if (sino == "N" || sino == "n")
             {
@@ -310,7 +312,10 @@ namespace CaOS_
                         }
                         break;
 
-                    
+                    case "run snake.esec":
+                        Snake snk = new Snake();
+                        snk.Run();
+                        break;
 
                     default:
                         Console.WriteLine(error);

@@ -1,9 +1,7 @@
-<Project Sdk="Microsoft.Net.Sdk">
-
+﻿<Project Sdk="Microsoft.Net.Sdk">
   <PropertyGroup>
     <TargetFramework>net462</TargetFramework>
   </PropertyGroup>
-
   <PropertyGroup>
     <BinFormat>elf</BinFormat>
     <Profile>VMware</Profile>
@@ -18,27 +16,45 @@
     <Deployment>ISO</Deployment>
     <Launch>VMware</Launch>
     <VisualStudioDebugPort>Pipe: Cosmos\Serial</VisualStudioDebugPort>
+    <PxeInterface>192.168.52.1</PxeInterface>
+    <VMware_Description>Use VMware Player or Workstation to deploy and debug.</VMware_Description>
+    <VMware_Deployment>ISO</VMware_Deployment>
+    <VMware_Launch>VMware</VMware_Launch>
+    <VMware_DebugEnabled>true</VMware_DebugEnabled>
+    <VMware_DebugMode>Source</VMware_DebugMode>
+    <VMware_VisualStudioDebugPort>Pipe: Cosmos\Serial</VMware_VisualStudioDebugPort>
+    <VMware_PxeInterface>192.168.52.1</VMware_PxeInterface>
+    <VMware_VMwareEdition>Player</VMware_VMwareEdition>
+    <VMware_OutputPath>bin\Debug\net462\</VMware_OutputPath>
+    <VMware_EnableGDB>False</VMware_EnableGDB>
+    <VMware_StartCosmosGDB>false</VMware_StartCosmosGDB>
+    <USB_Description>Makes a USB device such as a flash drive or external hard disk bootable.</USB_Description>
+    <USB_Deployment>USB</USB_Deployment>
+    <USB_Launch>None</USB_Launch>
+    <USB_DebugEnabled>False</USB_DebugEnabled>
+    <USB_DebugMode>Source</USB_DebugMode>
+    <USB_VisualStudioDebugPort>Pipe: Cosmos\Serial</USB_VisualStudioDebugPort>
+    <USB_PxeInterface>192.168.52.1</USB_PxeInterface>
+    <USB_VMwareEdition>Player</USB_VMwareEdition>
+    <USB_OutputPath>bin\Debug\net462\</USB_OutputPath>
+    <USB_EnableGDB>False</USB_EnableGDB>
+    <USB_StartCosmosGDB>false</USB_StartCosmosGDB>
   </PropertyGroup>
-
   <ItemGroup>
     <None Remove="*" />
     <Compile Remove="*" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include=".\CaOS_.csproj">
       <Name>CaOS_</Name>
-      <Project>{79845abe-e5b1-4076-88d9-add25fc6e821}</Project>
+      <Project>{bca17c9a-650e-4749-bbd0-935d26c9146b}</Project>
     </ProjectReference>
   </ItemGroup>
-
   <ItemGroup>
     <Reference Include="Cosmos.Core.Plugs, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5ae71220097cb983" />
     <Reference Include="Cosmos.Core.Plugs.Asm, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5ae71220097cb983" />
     <Reference Include="Cosmos.Debug.Kernel.Plugs.Asm, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5ae71220097cb983" />
     <Reference Include="Cosmos.System.Plugs, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5ae71220097cb983" />
   </ItemGroup>
-
   <Import Project="$(AppData)\Cosmos User Kit\Build\VSIP\Cosmos.targets" />
-
 </Project>
